@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Arena Wave</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="stage">
+    <canvas id="game" width="1280" height="720"></canvas>
+
+    <!-- 로비: 방 만들기 / 코드 참가 / 방 목록 -->
+    <div id="lobby" class="overlay">
+      <h1 class="title-gold">ARENA WAVE</h1>
+      <p class="subtitle">방을 만들거나, 코드로 참가하세요 · 최대 4명 협동</p>
+      <div class="name-row">
+        <label for="player-name">닉네임</label>
+        <input id="player-name" type="text" maxlength="10" placeholder="용사" autocomplete="off" />
+      </div>
+      <div class="lobby-actions">
+        <button id="create-room-btn" class="primary-btn">방 만들기</button>
+        <div class="join-row">
+          <input id="join-code" type="text" maxlength="4" placeholder="코드" autocomplete="off" />
+          <button id="join-room-btn" class="primary-btn">코드로 참가</button>
+        </div>
+      </div>
+      <div class="room-list-wrap">
+        <div class="room-list-head"><span>참가 가능한 방</span><button id="refresh-rooms" class="ghost-btn small">새로고침</button></div>
+        <div id="room-list" class="room-list"></div>
+      </div>
+      <div id="lobby-error" class="toast hidden"></div>
+    </div>
+
+    <!-- 대기실: 멤버 · 챔피언 선택(중복 잠금) · 준비 · 시작 -->
+    <div id="room" class="overlay hidden">
+      <div class="room-code-bar">
+        <span class="room-code-label">방 코드</span>
+        <span id="room-code" class="room-code">----</span>
+        <button id="copy-code" class="ghost-btn small">복사</button>
+        <button id="leave-btn" class="ghost-btn small">나가기</button>
+      </div>
+      <div id="room-members" class="room-members"></div>
+      <h2 class="room-sub">챔피언 선택 <span class="dim">(다른 멤버가 고른 챔피언은 잠금)</span></h2>
+      <div id="room-champs" class="card-row"></div>
+      <div class="room-foot">
+        <button id="ready-btn" class="primary-btn">준비</button>
+        <button id="start-btn" class="primary-btn gold" disabled>게임 시작</button>
+        <span id="start-hint" class="dim"></span>
+      </div>
+      <p class="hint">WASD 이동 · 마우스 조준 · 좌클릭/홀드 공격 · 우클릭/Space 대시 · Q/E/R 스킬</p>
+    </div>
+
+    <!-- 매판 변이 선택 -->
+    <div id="mutator-select" class="overlay hidden">
+      <h1 class="title-gold">이번 판의 변이</h1>
+      <p class="subtitle">시드마다 달라지는 규칙 — 하나를 선택하세요</p>
+      <div id="mutator-cards" class="card-row"></div>
+    </div>
+
+    <!-- 증강/스킬 선택 -->
+    <div id="augment-select" class="overlay hidden">
+      <h1 class="title-gold">강화 선택</h1>
+      <p class="subtitle">증강 또는 스킬 하나를 선택하세요</p>
+      <div id="augment-cards" class="card-row"></div>
+      <div id="augment-timer" class="aug-timer"></div>
+    </div>
+
+    <!-- 스킬 슬롯 교체 -->
+    <div id="skill-replace" class="overlay hidden">
+      <h1 class="title-gold">스킬 교체</h1>
+      <p class="subtitle" id="skill-replace-sub">새 스킬을 어느 슬롯에 넣을까요?</p>
+      <div id="skill-replace-cards" class="card-row"></div>
+      <button id="skill-replace-cancel" class="ghost-btn">취소</button>
+    </div>
+
+    <!-- 게임오버 -->
+    <div id="gameover" class="overlay hidden">
+      <h1 class="title-red">게임 오버</h1>
+      <div id="go-stats" class="go-stats"></div>
+      <button id="restart-btn">다시 시작</button>
+    </div>
+
+    <!-- 연결 상태 -->
+    <div id="conn" class="conn">서버 연결 중…</div>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="champMotion.js"></script>
+  <script src="enemyMotion.js"></script>
+  <script src="effects.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
